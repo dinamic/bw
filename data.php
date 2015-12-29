@@ -24,9 +24,6 @@ $time=date("U")."000";
 $_SESSION['rx'][] = array($time, $round_rx);
 $_SESSION['tx'][] = array($time, $round_tx);
 
-$data['label'] = $interface;
-$data['data'] = $_SESSION['rx'];
-
 /**
  * to make sure that the graph shows only the
  * last minute (saves some bandwitch to)
@@ -38,7 +35,11 @@ if (count($_SESSION['rx'])>60)
 }
 
 header('Content-Type: application/json');
-echo json_encode($data);
+
+echo json_encode(array(
+    'label' => $interface,
+    'data' => $_SESSION['rx'],
+));
 
 function isOSX()
 {
