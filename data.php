@@ -1,6 +1,21 @@
 <?php
 
-$interface="en4";
+/**
+ * Realtime bandwidth meter with php and jquery.
+ *
+ * @author Andreas Beder <andreas@codejungle.org>
+ * @author Nikola Petkanski <nikola@petkanski.com>
+ */
+
+// specify your network adapter here
+$interface='eth0';
+
+/**
+ * WARNING: DRAGONS AHEAD!
+ *
+ * Do not modify after this line, unless you know what you are doing.
+ */
+
 session_start();
 
 define('OS_LINUX', 'Linux');
