@@ -21,8 +21,8 @@ $round_rx=round($rbps/1024, 2);
 $round_tx=round($tbps/1024, 2);
 
 $time=date("U")."000";
-$_SESSION['rx'][] = "[$time, $round_rx]";
-$_SESSION['tx'][] = "[$time, $round_tx]";
+$_SESSION['rx'][] = array($time, $round_rx);
+$_SESSION['tx'][] = array($time, $round_tx);
 
 $data['label'] = $interface;
 $data['data'] = $_SESSION['rx'];
@@ -37,14 +37,8 @@ if (count($_SESSION['rx'])>60)
     unset($_SESSION['rx'][$x]);
 }
 
-/**
- * json_encode didnt work, if you found a workarround pls write me
- * echo json_encode($data, JSON_FORCE_OBJECT);
- */
-
-echo '
-{"label":"eth0","data":['.implode($_SESSION['rx'], ",").']}
-';
+header('Content-Type: application/json');
+echo json_encode($data);
 
 function isOSX()
 {
