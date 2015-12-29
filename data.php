@@ -53,7 +53,7 @@ header('Content-Type: application/json');
 
 echo json_encode(array(
     'label' => $interface,
-    'data' => $_SESSION['rx'],
+    'data' => array_values($_SESSION['rx']),
 ));
 
 function isOSX()
