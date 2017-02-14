@@ -7,8 +7,11 @@
  * @author Nikola Petkanski <nikola@petkanski.com>
  */
 
-// specify your network adapter here
-$interface='eth0';
+$interface = array_key_exists('interface', $_GET) ? $_GET['interface'] : null;
+
+if (!ctype_alnum($interface)) {
+    throw new RuntimeException('Invalid interface name. Must contain only alphabetic and numeric characters.');
+}
 
 /**
  * WARNING: DRAGONS AHEAD!

@@ -10,46 +10,55 @@ session_start();
         
         <script id="source" language="javascript" type="text/javascript">
         $(document).ready(function() {
-            var options = {
-                lines: { show: true },
-                points: { show: true },
-                xaxis: { mode: "time" }
-            };
-            var data = [];
-            var placeholder = $("#placeholder");
+            var renderInterfaceGraph = function (interfaceName) {
+                var options = {
+                    lines: { show: true },
+                    points: { show: true },
+                    xaxis: { mode: "time" }
+                };
 
-            $.plot(placeholder, data, options);
+                var data = [];
 
-            var iteration = 0;
+                var placeholderName = "placeholder_" + interfaceName;
 
-            function fetchData() {
-                ++iteration;
+                var html = "<div id=\"" + placeholderName + "\" style=\"width:600px;height:300px;\"></div>";
+                var placeholder = $(html);
 
-                function onDataReceived(series) {
-                    // we get all the data in one go, if we only got partial
-                    // data, we could merge it with what we already got
-                    data = [ series ];
-                    
-                    $.plot($("#placeholder"), data, options);
+                placeholder.appendTo($('body'));
+
+                $.plot(placeholder, data, options);
+
+                var iteration = 0;
+
+                function fetchData() {
+                    ++iteration;
+
+                    function onDataReceived(series) {
+                        // we get all the data in one go, if we only got partial
+                        // data, we could merge it with what we already got
+                        data = [ series ];
+
+                        $.plot(placeholder, data, options);
+                    }
+
+                    $.ajax({
+                        url: "data.php?interface=" + interfaceName,
+                        method: 'GET',
+                        dataType: 'json',
+                        success: onDataReceived
+                    });
+
+                    setTimeout(fetchData, 1000);
                 }
 
-                $.ajax({
-                    url: "data.php",
-                    method: 'GET',
-                    dataType: 'json',
-                    success: onDataReceived
-                });
-                
-                setTimeout(fetchData, 1060);
-            }
+                fetchData();
+            };
 
-            setTimeout(fetchData, 1000);
+            renderInterfaceGraph('eth0');
         });
-
-    </script>
+        </script>
     </head>
     <body>
-    <div id="placeholder" style="width:600px;height:300px;"></div>
-
+        <h1>bandwidth monitor written in php and javascript</h1>
     </body>
 </html>
